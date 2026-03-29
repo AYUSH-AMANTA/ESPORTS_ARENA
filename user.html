@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Esports Dashboard</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:#f8fafc;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:240px;
+  height:100vh;
+  position:fixed;
+  background:#ffffff;
+  border-right:1px solid #e2e8f0;
+  padding:20px;
+}
+
+.logo{
+  font-size:20px;
+  font-weight:700;
+  color:#2563eb;
+  margin-bottom:30px;
+}
+
+/* MENU */
+.menu-item{
+  padding:10px;
+  border-radius:8px;
+  cursor:pointer;
+  margin-bottom:8px;
+  color:#334155;
+  transition:0.2s;
+}
+
+.menu-item:hover{
+  background:#f1f5f9;
+}
+
+/* MAIN */
+.main{
+  margin-left:240px;
+  padding:25px;
+}
+
+/* HEADER */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.header h2{
+  font-size:22px;
+  color:#0f172a;
+}
+
+.user-box{
+  background:#ffffff;
+  padding:8px 15px;
+  border-radius:8px;
+  border:1px solid #e2e8f0;
+  font-size:14px;
+}
+
+/* CARD */
+.card{
+  border-radius:12px;
+  border:1px solid #e2e8f0;
+  background:#ffffff;
+  transition:0.2s;
+}
+
+.card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 6px 20px rgba(0,0,0,0.08);
+}
+
+/* IMAGE */
+.tournament-img{
+  width:100%;
+  height:160px;
+  object-fit:cover;
+  border-radius:10px;
+}
+
+/* TEXT */
+.title{
+  font-size:16px;
+  font-weight:600;
+  color:#0f172a;
+}
+
+.text{
+  font-size:14px;
+  color:#64748b;
+  margin-bottom:5px;
+}
+
+/* BUTTON */
+.btn-custom{
+  background:#2563eb;
+  color:white;
+  border:none;
+  font-size:14px;
+}
+
+.btn-custom:hover{
+  background:#1d4ed8;
+}
+
+/* LOGOUT */
+.logout{
+  margin-top:20px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+  <div class="logo">Esports Arena</div>
+
+  <div class="menu-item">Dashboard</div>
+  <div class="menu-item">My Tournaments</div>
+  <div class="menu-item">Profile</div>
+  <div class="menu-item">Settings</div>
+
+  <button class="btn btn-outline-danger w-100 logout" onclick="logout()">Logout</button>
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <div class="header">
+    <h2>Dashboard</h2>
+    <div class="user-box" id="userEmail"></div>
+  </div>
+
+  <h5 class="mb-3">Available Tournaments</h5>
+
+  <div class="row" id="tournaments"></div>
+
+</div>
+
+<script>
+
+// IMAGE (USE YOUR OWN)
+function getImage(game){
+  return "images/user.png";
+}
+
+// LOAD DATA
+function loadTournaments(){
+  $.get('http://localhost:3000/tournaments', function(data){
+
+    let html = '';
+
+    data.forEach(t => {
+      html += `
+        <div class="col-md-4 mb-4">
+          <div class="card p-3">
+
+            <img src="${getImage(t.game)}" class="tournament-img mb-3">
+
+            <div class="title mb-2">${t.name}</div>
+
+            <div class="text">Game: ${t.game}</div>
+            <div class="text">Entry Fee: ₹${t.entry_fee}</div>
+            <div class="text">Prize: ₹${t.prize}</div>
+            <div class="text mb-3">Date: ${t.date}</div>
+
+            <button class="btn btn-custom w-100" onclick="goToRegister(${t.id})">
+              Register
+            </button>
+
+          </div>
+        </div>
+      `;
+    });
+
+    $('#tournaments').html(html);
+  });
+}
+
+// REDIRECT
+function goToRegister(id){
+  window.location.href = `register.html?tournamentId=${id}`;
+}
+
+// LOGOUT
+function logout(){
+  localStorage.removeItem('currentUser');
+  window.location.href = "index.html";
+}
+
+// CHECK LOGIN
+let user = JSON.parse(localStorage.getItem('currentUser'));
+if(!user){
+  window.location.href = "index.html";
+}else{
+  $('#userEmail').text(user.email);
+}
+
+// LOAD
+loadTournaments();
+
+</script>
+
+</body>
+</html>

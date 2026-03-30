@@ -9,193 +9,313 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <style>
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: #f1f5f9;
+
+/* 🌌 BACKGROUND */
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  height:100vh;
+  background: url('https://images.unsplash.com/photo-1542751371-adc38448a05e') center/cover no-repeat;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
-/* LEFT IMAGE */
-.image-section {
-  height: 100vh;
-  background: url('images/login.png') center/cover no-repeat;
+/* DARK OVERLAY */
+body::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.75);
+  backdrop-filter: blur(10px);
 }
 
-/* RIGHT SIDE */
-.form-section {
-  height: 100vh;
-  background: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+/* PARTICLES */
+#particles{
+  position:fixed;
+  width:100%;
+  height:100%;
+  z-index:0;
+}
+
+/* CONTAINER */
+.container-box{
+  position:relative;
+  z-index:2;
+  width:100%;
+  max-width:400px;
 }
 
 /* LOGO */
-.logo {
-  position: absolute;
-  top: 25px;
-   text-align: center;
-  font-size: 22px;
-  font-weight: 800;
-  background: linear-gradient(90deg, #2563eb, #06b6d4);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  letter-spacing: 1px;
+.logo{
+  text-align:center;
+  font-size:28px;
+  font-weight:900;
+  background:linear-gradient(90deg,#38bdf8,#6366f1);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin-bottom:20px;
 }
 
-/* FORM BOX */
-.form-box {
-  width: 100%;
-  max-width: 350px;
+/* GLASS CARD */
+.form-box{
+  position:relative;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
+  backdrop-filter:blur(20px);
+  border-radius:20px;
+  padding:30px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.6);
+  overflow:hidden;
 }
 
-/* HEADINGS */
-h2 {
-  color: #0f172a;
-}
-
-/* INPUT */
-input {
-  border-radius: 10px !important;
-  background: #f8fafc !important;
-  border: 1px solid #cbd5e1 !important;
-  color: #0f172a !important;
-}
-
-input::placeholder {
-  color: #64748b !important;
-}
-
-/* BUTTON */
-button {
-  border-radius: 10px !important;
-}
-
-/* PRIMARY BUTTON */
-.btn-primary {
-  background: #2563eb;
-  border: none;
-}
-
-.btn-primary:hover {
-  background: #1d4ed8;
-}
-
-/* SUCCESS BUTTON */
-.btn-success {
-  background: #10b981;
-  border: none;
-}
-
-.btn-success:hover {
-  background: #059669;
-}
-
-/* LINKS */
-.link {
-  color: #2563eb;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.link:hover {
-  text-decoration: underline;
+/* NEON BORDER */
+.form-box::before{
+  content:'';
+  position:absolute;
+  inset:-2px;
+  border-radius:20px;
+  background:linear-gradient(90deg,#3b82f6,#6366f1,#38bdf8);
+  z-index:-1;
+  filter:blur(12px);
+  opacity:0.7;
 }
 
 /* TEXT */
-.text-muted {
-  color: #64748b !important;
+h2{ color:white; }
+.text-muted{ color:#cbd5e1 !important; }
+
+/* INPUT */
+input{
+  border-radius:12px !important;
+  background:rgba(255,255,255,0.1) !important;
+  border:1px solid rgba(255,255,255,0.2) !important;
+  color:white !important;
+}
+input::placeholder{ color:#cbd5e1 !important; }
+
+input:focus{
+  box-shadow:0 0 10px #6366f1 !important;
 }
 
-/* CARD STYLE (Dashboard) */
-.card {
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  background: #ffffff;
+/* PASSWORD */
+.password-box{ position:relative; }
+.eye{
+  position:absolute;
+  right:12px;
+  top:10px;
+  cursor:pointer;
+  color:#cbd5e1;
+}
+
+/* BUTTONS */
+.btn{
+  border-radius:12px;
+  transition:0.3s;
+}
+.btn-primary{
+  background:linear-gradient(90deg,#3b82f6,#6366f1);
+  border:none;
+}
+.btn-success{
+  background:linear-gradient(90deg,#10b981,#22c55e);
+  border:none;
+}
+.btn:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 15px rgba(99,102,241,0.8);
+}
+
+/* LINKS */
+.link{
+  color:#38bdf8;
+  cursor:pointer;
+}
+
+/* 🎮 ROLE SELECT */
+.role-select{
+  display:flex;
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.role-card{
+  flex:1;
+  padding:12px;
+  border-radius:12px;
+  text-align:center;
+  cursor:pointer;
+  border:1px solid rgba(255,255,255,0.2);
+  background:rgba(255,255,255,0.05);
+  color:#cbd5e1;
+  transition:0.3s;
+  font-weight:600;
+  position:relative;
+  overflow:hidden;
+}
+
+.role-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 0 15px rgba(99,102,241,0.5);
+}
+
+/* LIGHT SWEEP */
+.role-card::after{
+  content:'';
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:100%;
+  height:100%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,0.3),transparent);
+  transition:0.5s;
+}
+.role-card:hover::after{
+  left:100%;
+}
+
+/* ACTIVE */
+.role-card.active{
+  background:linear-gradient(90deg,#3b82f6,#6366f1);
+  color:white;
+  box-shadow:0 0 20px rgba(99,102,241,0.9);
 }
 
 /* HIDDEN */
-.hidden {
-  display: none;
+.hidden{ display:none; }
+
+/* TOGGLE */
+.toggle{
+  position:absolute;
+  top:20px;
+  right:20px;
+  cursor:pointer;
+  color:white;
+  font-size:18px;
 }
+
 </style>
 </head>
 
 <body>
 
-<div class="container-fluid">
-  <div class="row">
+<div id="particles"></div>
 
-    <!-- LEFT IMAGE -->
-    <div class="col-md-7 d-none d-md-block p-0">
-      <div class="image-section"></div>
-    </div>
+<div class="toggle" onclick="toggleTheme()">🌙</div>
 
-    <!-- RIGHT FORM -->
-    <div class="col-md-5 form-section">
+<div class="container-box">
 
-      <!-- LOGO -->
-      <div class="logo">Esports Arena</div>
+  <div class="logo">Esports Arena</div>
 
-      <div class="form-box">
+  <div class="form-box">
 
-        <h2 class="mb-2">Welcome</h2>
-        <p class="text-muted mb-4">Sign in or create an account</p>
+    <h2 class="mb-2 text-center">Welcome Back</h2>
+    <p class="text-muted text-center mb-4">Login or create account</p>
 
-        <!-- LOGIN -->
-        <div id="loginSection">
-          <input id="loginEmail" class="form-control mb-3" placeholder="Email">
-          <input id="loginPassword" type="password" class="form-control mb-3" placeholder="Password">
+    <!-- LOGIN -->
+    <div id="loginSection">
 
-          <button class="btn btn-primary w-100 mb-3" onclick="login()">Login</button>
-
-          <p class="text-center">
-            Don't have an account? 
-            <span class="link" onclick="showRegister()">Sign up</span>
-          </p>
-        </div>
-
-        <!-- REGISTER -->
-        <div id="registerSection" class="hidden">
-          <input id="name" class="form-control mb-3" placeholder="Name">
-          <input id="email" class="form-control mb-3" placeholder="Email">
-          <input id="password" type="password" class="form-control mb-3" placeholder="Password">
-
-          <button class="btn btn-success w-100 mb-3" onclick="register()">Create Account</button>
-
-          <p class="text-center">
-            Already have an account? 
-            <span class="link" onclick="showLogin()">Login</span>
-          </p>
-        </div>
-
+      <!-- ROLE -->
+      <div class="role-select">
+        <div class="role-card active" onclick="selectRole('user', this)">👤 Player</div>
+        <div class="role-card" onclick="selectRole('organizer', this)">🏆 Organizer</div>
       </div>
 
+      <input type="hidden" id="role" value="user">
+
+      <input id="loginEmail" class="form-control mb-3" placeholder="Email">
+
+      <div class="password-box mb-3">
+        <input id="loginPassword" type="password" class="form-control" placeholder="Password">
+        <span class="eye" onclick="togglePassword()">👁</span>
+      </div>
+
+      <div class="d-flex justify-content-between mb-3">
+        <div>
+          <input type="checkbox" id="remember"> 
+          <small class="text-muted">Remember</small>
+        </div>
+        <span class="link" onclick="forgotPassword()">Forgot?</span>
+      </div>
+
+      <button class="btn btn-primary w-100 mb-3" onclick="login()">Login</button>
+
+      <p class="text-center text-muted">
+        Don't have an account? 
+        <span class="link" onclick="showRegister()">Sign up</span>
+      </p>
     </div>
+
+    <!-- REGISTER -->
+    <div id="registerSection" class="hidden">
+      <input id="name" class="form-control mb-3" placeholder="Full Name">
+      <input id="email" class="form-control mb-3" placeholder="Email">
+      <input id="password" type="password" class="form-control mb-3" placeholder="Password">
+
+      <button class="btn btn-success w-100 mb-3" onclick="register()">Create Account</button>
+
+      <p class="text-center text-muted">
+        Already have an account? 
+        <span class="link" onclick="showLogin()">Login</span>
+      </p>
+    </div>
+
   </div>
+
 </div>
 
-<!-- DASHBOARD -->
-<div id="dashboard" class="hidden container mt-5">
-  <h2>Admin Dashboard</h2>
-  <button class="btn btn-danger mb-3" onclick="logout()">Logout</button>
-
-  <h4>Users</h4>
-  <div id="users"></div>
-</div>
+<!-- PARTICLES SCRIPT -->
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
 
 <script>
 
-// TOGGLE FORMS
-function showRegister(){
-  $('#loginSection').hide();
-  $('#registerSection').fadeIn();
+// PARTICLES INIT
+tsParticles.load("particles", {
+  background: { color: "transparent" },
+  particles: {
+    number: { value: 70 },
+    color: { value: "#6366f1" },
+    links: {
+      enable: true,
+      color: "#6366f1",
+      distance: 140,
+      opacity: 0.4
+    },
+    move: { enable: true, speed: 1 },
+    size: { value: { min: 1, max: 3 } },
+    opacity: { value: 0.5 }
+  }
+});
+
+// THEME
+function toggleTheme(){
+  document.body.classList.toggle('light');
 }
 
+// PASSWORD
+function togglePassword(){
+  let input = document.getElementById("loginPassword");
+  input.type = input.type === "password" ? "text" : "password";
+}
+
+// ROLE
+function selectRole(role, el){
+  $('#role').val(role);
+  $('.role-card').removeClass('active');
+  $(el).addClass('active');
+}
+
+// FORGOT
+function forgotPassword(){
+  alert("Contact admin to reset password");
+}
+
+// TOGGLE FORMS
+function showRegister(){
+  $('#loginSection').fadeOut(200, () => $('#registerSection').fadeIn(300));
+}
 function showLogin(){
-  $('#registerSection').hide();
-  $('#loginSection').fadeIn();
+  $('#registerSection').fadeOut(200, () => $('#loginSection').fadeIn(300));
 }
 
 // REGISTER
@@ -218,6 +338,9 @@ function register(){
 
 // LOGIN
 function login(){
+
+  let role = $('#role').val();
+
   $.ajax({
     url: 'http://localhost:3000/login',
     method: 'POST',
@@ -233,43 +356,19 @@ function login(){
         return;
       }
 
-      localStorage.setItem('currentUser', JSON.stringify(user));
+      user.role = role;
 
-      if(user.role === 'admin'){
-        loadDashboard();
-      }else{
+      if($('#remember').is(':checked')){
+        localStorage.setItem('currentUser', JSON.stringify(user));
+      }
+
+      if(role === 'organizer'){
+        window.location.href = "organizer.html";
+      } else {
         window.location.href = "user.html";
       }
     }
   });
-}
-
-// LOAD DASHBOARD
-function loadDashboard(){
-  $('body').html($('#dashboard'));
-  $('#dashboard').show();
-
-  $.get('http://localhost:3000/users', function(data){
-    let html = '';
-    data.forEach(u => {
-      html += `<div class="card p-2 mb-2">
-        ${u.name} - ${u.email}
-      </div>`;
-    });
-    $('#users').html(html);
-  });
-}
-
-// LOGOUT
-function logout(){
-  localStorage.removeItem('currentUser');
-  location.reload();
-}
-
-// AUTO LOGIN CHECK
-let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-if(currentUser && currentUser.role === 'admin'){
-  loadDashboard();
 }
 
 </script>

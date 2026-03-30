@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Help & Support</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:#f8fafc;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:240px;
+  height:100vh;
+  position:fixed;
+  background:#ffffff;
+  border-right:1px solid #e2e8f0;
+  padding:20px;
+}
+
+.logo{
+  font-size:20px;
+  font-weight:700;
+  color:#2563eb;
+  margin-bottom:30px;
+}
+
+.menu-item{
+  padding:10px;
+  border-radius:8px;
+  cursor:pointer;
+  margin-bottom:8px;
+  color:#334155;
+}
+
+.menu-item:hover{
+  background:#f1f5f9;
+}
+
+/* MAIN */
+.main{
+  margin-left:240px;
+  padding:25px;
+}
+
+/* CARD */
+.card{
+  border-radius:14px;
+  border:1px solid #e2e8f0;
+  background:#ffffff;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.05);
+}
+
+.title{
+  font-size:18px;
+  font-weight:600;
+  margin-bottom:15px;
+  color:#0f172a;
+}
+
+.text{
+  font-size:14px;
+  color:#64748b;
+  margin-bottom:10px;
+}
+
+/* BUTTON */
+.btn-custom{
+  background:#2563eb;
+  color:white;
+  border:none;
+}
+
+.btn-custom:hover{
+  background:#1d4ed8;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="logo">Esports Arena</div>
+
+  <div class="menu-item" onclick="goDashboard()">Dashboard</div>
+  <div class="menu-item" onclick="goMyTournaments()">My Tournaments</div>
+  <div class="menu-item" onclick="goProfile()">Profile</div>
+  <div class="menu-item">Help</div>
+
+  <button class="btn btn-outline-danger w-100 mt-3" onclick="logout()">Logout</button>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <h2 class="mb-4">Help & Support</h2>
+
+  <!-- CONTACT -->
+  <div class="card">
+    <div class="title">Contact Support</div>
+    <div class="text">📧 Email: support@esportsarena.com</div>
+    <div class="text">📞 Phone: +91 7749993376</div>
+    <div class="text">⏰ Support Time: 10 AM – 8 PM</div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="card">
+    <div class="title">Frequently Asked Questions</div>
+
+    <div class="text"><b>❓ Payment done but not approved?</b><br>
+    Wait for admin verification. Usually takes 1–2 hours.</div>
+
+    <div class="text"><b>❓ Where will I get Room ID & Password?</b><br>
+    After approval, it will appear in "My Tournaments".</div>
+
+    <div class="text"><b>❓ Can I cancel registration?</b><br>
+    Currently not supported. Contact support.</div>
+
+  </div>
+
+  <!-- REPORT ISSUE -->
+  <div class="card">
+    <div class="title">Report an Issue</div>
+
+    <input id="subject" class="form-control mb-2" placeholder="Subject">
+    <textarea id="message" class="form-control mb-3" rows="4" placeholder="Describe your issue..."></textarea>
+
+    <button class="btn btn-custom w-100" onclick="submitIssue()">
+      Submit
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+
+// USER CHECK
+let user = JSON.parse(localStorage.getItem('currentUser'));
+
+if(!user){
+  window.location.href = "index.html";
+}
+
+// NAVIGATION
+function goDashboard(){
+  window.location.href = "user.html";
+}
+
+function goMyTournaments(){
+  window.location.href = "user.html#myTournaments";
+}
+
+function goProfile(){
+  window.location.href = "profile.html";
+}
+
+function logout(){
+  localStorage.removeItem('currentUser');
+  window.location.href = "index.html";
+}
+
+// SUBMIT ISSUE (FRONTEND ONLY)
+function submitIssue(){
+
+  let subject = $('#subject').val();
+  let message = $('#message').val();
+
+  if(!subject || !message){
+    alert('Please fill all fields');
+    return;
+  }
+
+  alert('Your issue has been submitted!');
+
+  $('#subject').val('');
+  $('#message').val('');
+}
+
+function goProfile(){
+  window.location.href = "profile.html";
+}
+
+</script>
+
+</body>
+</html>

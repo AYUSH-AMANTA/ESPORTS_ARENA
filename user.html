@@ -12,7 +12,8 @@
 body{
   margin:0;
   font-family:'Segoe UI',sans-serif;
-  background:#f8fafc;
+  background:linear-gradient(135deg,#0f172a,#020617);
+  color:white;
 }
 
 /* SIDEBAR */
@@ -20,30 +21,30 @@ body{
   width:240px;
   height:100vh;
   position:fixed;
-  background:#ffffff;
-  border-right:1px solid #e2e8f0;
+  background:#020617;
+  border-right:1px solid #1e293b;
   padding:20px;
 }
 
 .logo{
   font-size:20px;
   font-weight:700;
-  color:#2563eb;
+  color:#38bdf8;
   margin-bottom:30px;
 }
 
-/* MENU */
 .menu-item{
   padding:10px;
   border-radius:8px;
   cursor:pointer;
   margin-bottom:8px;
-  color:#334155;
-  transition:0.2s;
+  color:#ffffff;
+  transition:0.3s;
 }
 
 .menu-item:hover{
-  background:#f1f5f9;
+  background:#1e293b;
+  color:#38bdf8;
 }
 
 /* MAIN */
@@ -61,29 +62,28 @@ body{
 }
 
 .header h2{
-  font-size:22px;
-  color:#0f172a;
+  color:#ffffff;
 }
 
 .user-box{
-  background:#ffffff;
+  background:rgba(255,255,255,0.05);
   padding:8px 15px;
   border-radius:8px;
-  border:1px solid #e2e8f0;
-  font-size:14px;
+  border:1px solid rgba(255,255,255,0.1);
 }
 
 /* CARD */
 .card{
-  border-radius:12px;
-  border:1px solid #e2e8f0;
-  background:#ffffff;
-  transition:0.2s;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(8px);
+  transition:0.3s;
 }
 
 .card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 6px 20px rgba(0,0,0,0.08);
+  transform:translateY(-5px);
+  box-shadow:0 10px 25px rgba(0,0,0,0.4);
 }
 
 /* IMAGE */
@@ -98,25 +98,24 @@ body{
 .title{
   font-size:16px;
   font-weight:600;
-  color:#0f172a;
+  color:#ffffff;
 }
 
 .text{
   font-size:14px;
-  color:#64748b;
-  margin-bottom:5px;
+  color:#ffffff;
+  opacity:0.8;
 }
 
 /* BUTTON */
 .btn-custom{
-  background:#2563eb;
-  color:white;
+  background:#38bdf8;
+  color:black;
   border:none;
-  font-size:14px;
 }
 
 .btn-custom:hover{
-  background:#1d4ed8;
+  background:#0ea5e9;
 }
 
 /* LOGOUT */
@@ -130,40 +129,39 @@ body{
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-
   <div class="logo">Esports Arena</div>
 
   <div class="menu-item">Dashboard</div>
-  <div class="menu-item">My Tournaments</div>
-  <div class="menu-item">Profile</div>
-  <div class="menu-item">Settings</div>
+  <div class="menu-item" onclick="loadMyTournaments()">My Tournaments</div>
+  <div class="menu-item" onclick="goProfile()">Profile</div>
+  <div class="menu-item" onclick="goHelp()">Help</div>
 
   <button class="btn btn-outline-danger w-100 logout" onclick="logout()">Logout</button>
-
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
   <div class="header">
-    <h2>Dashboard</h2>
+    <h2>Register Here</h2>
     <div class="user-box" id="userEmail"></div>
   </div>
 
   <h5 class="mb-3">Available Tournaments</h5>
-
   <div class="row" id="tournaments"></div>
+
+  <h5 class="mb-3 mt-4">My Tournaments</h5>
+  <div class="row" id="myTournaments"></div>
 
 </div>
 
 <script>
 
-// IMAGE (USE YOUR OWN)
 function getImage(game){
   return "images/user.png";
 }
 
-// LOAD DATA
+// LOAD ALL TOURNAMENTS
 function loadTournaments(){
   $.get('http://localhost:3000/tournaments', function(data){
 
@@ -183,9 +181,11 @@ function loadTournaments(){
             <div class="text">Prize: ₹${t.prize}</div>
             <div class="text mb-3">Date: ${t.date}</div>
 
-            <button class="btn btn-custom w-100" onclick="goToRegister(${t.id})">
-              Register
-            </button>
+            <div id="status-${t.id}">
+              <button class="btn btn-custom w-100" onclick="goToRegister(${t.id})">
+                Register
+              </button>
+            </div>
 
           </div>
         </div>
@@ -193,32 +193,118 @@ function loadTournaments(){
     });
 
     $('#tournaments').html(html);
+
+    setTimeout(() => {
+      loadMyRegistrations();
+      loadMyTournaments();
+    }, 300);
+
   });
 }
 
-// REDIRECT
+// STATUS
+function loadMyRegistrations(){
+
+  $.get(`http://localhost:3000/myRegistrations/${user.id}`, function(data){
+
+    data.forEach(r => {
+
+      let statusHTML = "";
+
+      if(r.payment_status === "pending"){
+        statusHTML = `<div class="text text-warning fw-bold">🟡 Pending</div>`;
+      }
+      else if(r.payment_status === "approved"){
+        statusHTML = `<div class="text text-success fw-bold">✅ Approved</div>`;
+      }
+      else if(r.payment_status === "rejected"){
+        statusHTML = `<div class="text text-danger fw-bold">❌ Rejected</div>`;
+      }
+
+      if(statusHTML){
+        $(`#status-${r.tournament_id}`).html(statusHTML);
+      }
+
+    });
+
+  });
+}
+
+// MY TOURNAMENTS
+function loadMyTournaments(){
+
+  document.getElementById("myTournaments").scrollIntoView({
+    behavior: "smooth"
+  });
+
+  $.get(`http://localhost:3000/myApprovedTournaments/${user.id}`, function(data){
+
+    let html = '';
+
+    if(!data || data.length === 0){
+      html = `<p class="text-muted">No approved tournaments yet</p>`;
+    } else {
+
+      data.forEach(t => {
+
+        html += `
+          <div class="col-md-4 mb-4">
+            <div class="card p-3">
+
+              <div class="title mb-2">${t.name}</div>
+
+              <div class="text">Game: ${t.game}</div>
+              <div class="text">Prize: ₹${t.prize}</div>
+              <div class="text">Date: ${t.date}</div>
+
+              <hr>
+
+              <div class="text fw-bold text-success">🎮 Match Details</div>
+
+              <div class="text">Room ID: ${t.room_id || 'Not Announced'}</div>
+              <div class="text">Password: ${t.room_password || 'Not Announced'}</div>
+              <div class="text">Match Time: ${t.match_time || 'Not Announced'}</div>
+
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    $('#myTournaments').html(html);
+  });
+}
+
+// NAV
 function goToRegister(id){
   window.location.href = `register.html?tournamentId=${id}`;
 }
 
-// LOGOUT
+function goProfile(){
+  window.location.href = "profile.html";
+}
+
+function goHelp(){
+  window.location.href = "help.html";
+}
+
 function logout(){
   localStorage.removeItem('currentUser');
   window.location.href = "index.html";
 }
 
-// CHECK LOGIN
+// LOGIN CHECK
 let user = JSON.parse(localStorage.getItem('currentUser'));
+
 if(!user){
   window.location.href = "index.html";
 }else{
   $('#userEmail').text(user.email);
 }
 
-// LOAD
+// INIT
 loadTournaments();
 
 </script>
-
 </body>
 </html>

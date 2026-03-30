@@ -180,37 +180,7 @@ function toggleCreate(){
 }
 
 // CREATE TOURNAMENT
-function createTournament(){
 
-  const data = {
-    name: $('#name').val(),
-    game: $('#game').val(),
-    entry_fee: $('#entry_fee').val(),
-    prize: $('#prize').val(),
-    date: $('#date').val(),
-    organizer_id: user.id   // 🔥 ADD THIS LINE
-  };
-
-  console.log(data); // DEBUG
-
-  $.ajax({
-    url:'http://localhost:3000/createTournament',
-    method:'POST',
-    contentType:'application/json',
-    data: JSON.stringify(data),
-
-    success:function(res){
-      alert(res);
-      loadTournaments();
-      $('#createSection').slideUp();
-    },
-
-    error:function(err){
-      console.log(err);
-      alert("Error creating tournament");
-    }
-  });
-}
 // LOAD TOURNAMENTS
 function loadTournaments(){
 

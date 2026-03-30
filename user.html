@@ -133,12 +133,28 @@ body{
 
   <div class="logo">Esports Arena</div>
 
-  <div class="menu-item">Dashboard</div>
-  <div class="menu-item">My Tournaments</div>
-  <div class="menu-item">Profile</div>
-  <div class="menu-item">Settings</div>
+  <div class="menu">
+    <div class="menu-item active" onclick="goPage('dashboard')">
+      Dashboard
+    </div>
 
-  <button class="btn btn-outline-danger w-100 logout" onclick="logout()">Logout</button>
+    <div class="menu-item" onclick="goPage('my-tournaments')">
+      My Tournaments
+    </div>
+
+    <div class="menu-item" onclick="goPage('profile')">
+      Profile
+    </div>
+
+    <div class="menu-item" onclick="goPage('settings')">
+      Settings
+    </div>
+  </div>
+
+  <!-- ⚠️ KEEP THIS EXACT CLASS (no CSS change) -->
+  <button class="btn btn-outline-danger w-100 logout" onclick="logout()">
+    Logout
+  </button>
 
 </div>
 
@@ -217,6 +233,35 @@ if(!user){
 
 // LOAD
 loadTournaments();
+
+</script>
+<script>
+
+// Navigation function
+function goPage(page){
+
+  if(page === 'dashboard'){
+    window.location.href = "user.html";
+  }
+
+  else if(page === 'my-tournaments'){
+    window.location.href = "my-tournaments.html";
+  }
+
+  else if(page === 'profile'){
+    window.location.href = "profile.html";
+  }
+
+  else if(page === 'settings'){
+    window.location.href = "settings.html";
+  }
+}
+
+// Logout
+function logout(){
+  localStorage.removeItem('currentUser');
+  window.location.href = "index.html";
+}
 
 </script>
 
